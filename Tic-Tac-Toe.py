@@ -1,3 +1,6 @@
+#play Tic-Tac-Toe with two human players
+
+#print board
 def printboard(board, n):
     print("\n")
     for i in range(0, n*n):
@@ -5,6 +8,7 @@ def printboard(board, n):
         if i != 0 and (i+1) % n == 0:
             print("\n")
 
+#check if there are empty spaces left on board
 def emptyspaces(board, n):
     spaceflag = 0
     for i in range(0, n*n):
@@ -12,6 +16,7 @@ def emptyspaces(board, n):
             spaceflag = 1
     return spaceflag
 
+#check if any row is full of Xs/Os
 def checkrows(board, n, turn):
     for i in range(0, n*n, n):
         checkflag = 0
@@ -24,8 +29,9 @@ def checkrows(board, n, turn):
             return 1
     return 0
 
+#check if any col is full of Xs/Os
 def checkcols(board, n, turn):
-    for i in range(0, n): #i goes from 0 to 3 in steps of 1
+    for i in range(0, n):
         checkflag = 0
         for j in range(i, i+n*(n-1)+1, n):
             if turn == 0 and board[j] == 'X':
@@ -36,6 +42,7 @@ def checkcols(board, n, turn):
             return 1
     return 0
 
+#check if any diagonal is full of Xs/Os
 def checkdiags(board, n, turn):
     #left-up to right-down diagonal
     checkflag = 0
@@ -71,6 +78,7 @@ def checkwin(board, n):
     elif emptyspaces(board, n) == 0:
         return 0
 
+#check if move is valid i.e. on the board and blank
 def isvalid(move):
     if move >= 0 and move < n*n:
         if board[move] == ' ':
@@ -82,27 +90,32 @@ def isvalid(move):
 n = 3
 choice = 'y'
 
+#play as many games as the players want
 while choice == 'y':
 
     print("\n-----------------------\nWelcome to Tic-Tac-Toe!\n-----------------------")
     board = []
+    #print blank board
     for i in range(0, n*n):
         board.append(' ')
     printboard(board, n)
 
+    #keep going while there are still empty spaces on board
     while emptyspaces(board, n) == 1:
         
         validflag = 0
+        #keep going until player 1 enters a valid move
         while validflag == 0:
               move = eval(input("\nPlayer 1 (X), enter your move : "))
               if isvalid(move) == 1:
                 validflag = 1
               else:
                 print("Invalid move. Try again!")
-        
+        #play X there
         board[move] = 'X'
         printboard(board, n)
 
+        #check if anyone has won yet
         if checkwin(board, n) == 1:
             print("Player 1 has won!\n")
             break
@@ -113,6 +126,7 @@ while choice == 'y':
             print("It's a draw!\n")
             break
 
+        #keep going until player 2 enters a valid move
         validflag = 0
         while validflag == 0:
             move = eval(input("\nPlayer 2 (O), enter your move : "))
@@ -120,10 +134,11 @@ while choice == 'y':
                 validflag = 1
             else:
                 print("Invalid move. Try again!")
-        
+        #play O there
         board[move] = 'O'
         printboard(board, n)
 
+        #check if anyone has won yet
         if checkwin(board, n) == 1:
             print("Player 1 has won!\n")
             break
