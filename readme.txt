@@ -2,7 +2,7 @@
 GUIDE TO TIC-TAC-TOE AGAINST A HUMAN/AI.
 ----------------------------------------
 
-This repository contains three programs for playing the game Tic-Tac-Toe.
+This repository contains three Python programs for playing the game Tic-Tac-Toe.
 
 1) Tic-Tac-Toe.py - for two humans! Play with a friend.
 2) Tic-Minimax.py - for one human! Play with an AI constructed using the Minimax algorithm.
