@@ -61,10 +61,10 @@ def checkdiags(board, n, turn):
 
 #returns +1 if X has won, -1 if O has won, 0 if draw
 def checkwin(board, n):
-    #check if X has won (computer)
+    #check if X has won (player 1)
     if checkrows(board, n, 0) == 1 or checkcols(board, n, 0) == 1 or checkdiags(board, n, 0) == 1:
         return 1
-    #check if O has won (player)
+    #check if O has won (player 2)
     elif checkrows(board, n, 1) == 1 or checkcols(board, n, 1) == 1 or checkdiags(board, n, 1) == 1:
         return -1
     #check if draw i.e. no blank spaces left but neither X/O has won
@@ -80,54 +80,61 @@ def isvalid(move):
 #let's store the board as an array of length n*n
 #each element is either X or O or [blank]
 n = 3
-board = []
-for i in range(0, n*n):
-    board.append(' ')
-printboard(board, n)
+choice = 'y'
 
-while emptyspaces(board, n) == 1:
-    
-    validflag = 0
-    while validflag == 0:
-          move = eval(input("\nComputer (X), enter your move : "))
-          if isvalid(move) == 1:
-            validflag = 1
-          else:
-            print("Invalid move. Try again!")
-    
-    board[move] = 'X'
+while choice == 'y':
+
+    print("\n-----------------------\nWelcome to Tic-Tac-Toe!\n-----------------------")
+    board = []
+    for i in range(0, n*n):
+        board.append(' ')
     printboard(board, n)
 
-    if checkwin(board, n) == 1:
-        print("Computer has won!\n")
-        break
-    elif checkwin(board, n) == -1:
-        print("Player has won!\n")
-        break
-    elif checkwin(board, n) == 0:
-        print("It's a draw!\n")
-        break
+    while emptyspaces(board, n) == 1:
+        
+        validflag = 0
+        while validflag == 0:
+              move = eval(input("\nPlayer 1 (X), enter your move : "))
+              if isvalid(move) == 1:
+                validflag = 1
+              else:
+                print("Invalid move. Try again!")
+        
+        board[move] = 'X'
+        printboard(board, n)
 
-    validflag = 0
-    while validflag == 0:
-        move = eval(input("\nPlayer (O), enter your move : "))
-        if isvalid(move) == 1:
-            validflag = 1
-        else:
-            print("Invalid move. Try again!")
-          
-    board[move] = 'O'
-    printboard(board, n)
+        if checkwin(board, n) == 1:
+            print("Player 1 has won!\n")
+            break
+        elif checkwin(board, n) == -1:
+            print("Player 2 has won!\n")
+            break
+        elif checkwin(board, n) == 0:
+            print("It's a draw!\n")
+            break
 
-    if checkwin(board, n) == 1:
-        print("Computer has won!\n")
-        break
-    elif checkwin(board, n) == -1:
-        print("Player has won!\n")
-        break
-    elif checkwin(board, n) == 0:
-        print("It's a draw!\n")
-        break
+        validflag = 0
+        while validflag == 0:
+            move = eval(input("\nPlayer 2 (O), enter your move : "))
+            if isvalid(move) == 1:
+                validflag = 1
+            else:
+                print("Invalid move. Try again!")
+        
+        board[move] = 'O'
+        printboard(board, n)
+
+        if checkwin(board, n) == 1:
+            print("Player 1 has won!\n")
+            break
+        elif checkwin(board, n) == -1:
+            print("Player 2 has won!\n")
+            break
+        elif checkwin(board, n) == 0:
+            print("It's a draw!\n")
+            break
+                
+    choice = input("Want another go? (y/n) ")
 
 
 
