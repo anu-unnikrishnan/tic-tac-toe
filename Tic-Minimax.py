@@ -1,3 +1,7 @@
+#play Tic-Tac-Toe with one human player, one computer player using AI
+#use minimax algorithm for AI decision-making
+
+#print board
 def printboard(board, n):
     print("\n")
     for i in range(0, n*n):
@@ -5,6 +9,7 @@ def printboard(board, n):
         if i != 0 and (i+1) % n == 0:
             print("\n")
 
+#check if there are empty spaces left on board
 def emptyspaces(board, n):
     spaceflag = 0
     for i in range(0, n*n):
@@ -12,6 +17,7 @@ def emptyspaces(board, n):
             spaceflag = 1
     return spaceflag
 
+#check if any row is full of Xs/Os
 def checkrows(board, n, turn):
     for i in range(0, n*n, n):
         checkflag = 0
@@ -24,6 +30,7 @@ def checkrows(board, n, turn):
             return 1
     return 0
 
+#check if any col is full of Xs/Os
 def checkcols(board, n, turn):
     for i in range(0, n): #i goes from 0 to 3 in steps of 1
         checkflag = 0
@@ -36,6 +43,7 @@ def checkcols(board, n, turn):
             return 1
     return 0
 
+#check if any diagonal is full of Xs/Os
 def checkdiags(board, n, turn):
     #left-up to right-down diagonal
     checkflag = 0
@@ -74,6 +82,7 @@ def checkwin(board, n):
     else:
         return -5
 
+#check if move is valid i.e. on the board and blank
 def isvalid(move):
     if move >= 0 and move < n*n:
         if board[move] == ' ':
@@ -83,37 +92,41 @@ def isvalid(move):
 #return score and index for best move
 def getcomputermove(board, n, depth, ismax, index):
     
+    #if we have reached a terminal state (win/lose/draw)
     if checkwin(board, n) == +1 or checkwin(board, n) == -1 or checkwin(board, n) == 0:
         score = checkwin(board, n)
-        #print("ooh! we have a terminal state at depth", depth)
         bestmove = [score, index]
         return bestmove
     
+    #if it's the maximiser's turn
     if ismax == True:
         score = -5
+        #loop through to find blank spaces
         for i in range(0, n*n):
             if board[i] == ' ':
-                #print("\nplaying O in i =", i)
-                newboard = board[:]
+                newboard = board[:] #making a copy of the board
                 newboard[i] = 'O'
+                #maximiser calls the minimiser
                 var = getcomputermove(newboard, n, depth+1, not(ismax), index)[0]
+                #if there's a better maximum score, choose that
                 if var > score:
                     score = var
                     index = i
-                #print("the max score at depth", depth+1, "is", score)
 
+    #if it's the minimiser's turn
     else:
         score = 5
+        #loop through to find blank spaces
         for i in range(0, n*n):
             if board[i] == ' ':
-                #print("\nplaying X in i =", i)
-                newboard = board[:]
+                newboard = board[:] #making a copy of the board
                 newboard[i] = 'X'
+                #minimiser calls the maximiser
                 var = getcomputermove(newboard, n, depth+1, not(ismax), index)[0]
+                #if there's a better minimum score, choose that
                 if var < score:
                     score = var
                     index = i
-                #print("the min score at depth", depth+1, "is", score)
 
     bestmove = [score, index]
     return bestmove
@@ -123,26 +136,32 @@ def getcomputermove(board, n, depth, ismax, index):
 n = 3
 choice = 'y'
 
+#play as many games as the player wants
 while choice == 'y':
     
-    print("\nWelcome to Tic-Tac-Toe!")
+    print("\n-----------------------\nWelcome to Tic-Tac-Toe!\n-----------------------")
     board = []
+    #print blank board
     for i in range(0, n*n):
         board.append(' ')
     printboard(board, n)
-    
+
+    #keep going while there are still empty spaces on board
     while emptyspaces(board, n) == 1:
 
         validflag = 0
+        #keep going until the player enters a valid move
         while validflag == 0:
             move = eval(input("\nEnter your move : "))
             if isvalid(move) == 1:
                 validflag = 1
             else:
                 print("Invalid move. Try again!")
+        #play X there
         board[move] = 'X'
         printboard(board, n)
 
+        #check if anyone has won yet
         if checkwin(board, n) == -1:
             print("Wow, you've won!\n")
             break
@@ -153,13 +172,15 @@ while choice == 'y':
             print("It's a draw!\n")
             break
 
+        #computer calculates best move based on minimax
         print("\nI'm thinking...")
-        chosenmove = getcomputermove(board, n, 0, True, -5)
-        move = chosenmove[1]
-        #print("\nfinal best [score, move] = ", chosenmove)
+        chosenmove = getcomputermove(board, n, 0, True, -5) #depth = 0, ismax = True, index = -5
+        move = chosenmove[1] #chosenmove = [score, index] of best move
+        #play O there
         board[move] = 'O'
         printboard(board, n)
 
+        #check if anyone has won yet
         if checkwin(board, n) == -1:
             print("Wow, you've won!\n")
             break
@@ -169,7 +190,12 @@ while choice == 'y':
         elif checkwin(board, n) == 0:
             print("It's a draw!\n")
             break
+
     choice = input("Want another go? (y/n) ")
 
+    if choice == 'y':
+        print("\nAll right! Let's see if you can beat me this time.\n")
+    else:
+        print("\nI see you're not brave enough. See you later!\n")
 
 
